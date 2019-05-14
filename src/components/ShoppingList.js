@@ -5,19 +5,18 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uuid from 'uuid';
 import { faPlus } from '@fortawesome/pro-regular-svg-icons';
 import { faTimes } from '@fortawesome/pro-regular-svg-icons/faTimes';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { getItems } from '../actions/itemActions';
 
 class ShoppingList extends Component {
-  state = {
-    items: [
-      { id: uuid(), label: 'Water' },
-      { id: uuid(), label: 'Milk' },
-      { id: uuid(), label: 'Ketchup' },
-      { id: uuid(), label: 'Eggs' }
-    ]
-  };
+  componentDidMount() {
+    this.props.getItems();
+  }
 
   render() {
-    const { items } = this.state;
+    const { items } = this.props.item;
 
     return (
       <Container>
@@ -63,4 +62,13 @@ class ShoppingList extends Component {
   }
 }
 
-export default ShoppingList;
+ShoppingList.propTypes = {
+  getItems: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  item: state.item,
+});
+
+export default connect(mapStateToProps, { getItems })(ShoppingList);
